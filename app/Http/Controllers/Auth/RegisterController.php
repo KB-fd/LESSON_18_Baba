@@ -29,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/login';
 
     /**
      * Create a new controller instance.
@@ -50,9 +50,20 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'not_regex:/^[　]+$/u'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ],
+         [
+        // ここから日本語エラーメッセージを追加
+        'name.required' => '名前は必須です。',
+        'name.not_regex' => '名前に全角スペースのみは使用できません。',
+        'email.required' => 'メールアドレスは必須です。',
+        'email.email' => 'メールアドレスの形式が正しくありません。',
+        'email.unique' => 'このメールアドレスは既に使われています。',
+        'password.required' => 'パスワードは必須です。',
+        'password.min' => 'パスワードは8文字以上で入力してください。',
+        'password.confirmed' => 'パスワードが一致しません。',
         ]);
     }
 
