@@ -29,7 +29,11 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/login';
+    protected function redirectTo()
+{
+    return route('login');
+}
+
 
     /**
      * Create a new controller instance.

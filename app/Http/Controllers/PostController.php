@@ -46,8 +46,14 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'content' => 'required|string|max:1000',
-        ]);
+    'content' => [
+        'required',
+        'string',
+        'max:100',
+        'regex:/^(?!　+$).+$/u', // 全角スペースだけの投稿を禁止
+    ],
+]);
+
 
         Post::create([
             'user_id' => auth()->id(),
@@ -79,8 +85,13 @@ class PostController extends Controller
         }
 
         $request->validate([
-            'content' => 'required|string|max:1000',
-        ]);
+    'content' => [
+        'required',
+        'string',
+        'max:100',
+        'regex:/^(?!　+$).+$/u', // 全角スペースだけは禁止
+    ],
+]);
 
         $post->update([
             'content' => $request->input('content'),
