@@ -8,6 +8,9 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+
 
 class RegisterController extends Controller
 {
@@ -33,6 +36,19 @@ class RegisterController extends Controller
 {
     return route('login');
 }
+
+public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        // 自動ログインはしないのでコメントアウト
+        // $this->guard()->login($user);
+
+        // 登録後はログインページへリダイレクト
+        return redirect('/login')->with('status', '登録が完了しました。ログインしてください。');
+    }
 
 
     /**
